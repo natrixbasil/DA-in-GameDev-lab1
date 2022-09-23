@@ -62,10 +62,12 @@ plt.scatter(x,y)
 
 ```
 
-- Определите связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
-
 ![image](https://user-images.githubusercontent.com/114161306/191946018-d0d7afe2-ce23-4e44-b003-cbf425161cd6.png)
 
+- Определите связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
+
+
+```py
 #The basic linear regression model is wx+ b, and since this is a two-dimensional space, the model is ax+ b
 def model(a, b, x):
     return a*x + b
@@ -90,8 +92,9 @@ def iterate(a,b,x,y,times):
         a,b = optimize(a,b,x,y)
     return a,b
     
-    ```
-    
+```
+```py
+
     #Initialize parameters and display
 a = np.random.rand(1)
 print(a)
@@ -106,9 +109,11 @@ print(a,b,loss)
 plt.scatter(x,y)
 plt.plot(x,prediction)
 
+```
+
 ![image](https://user-images.githubusercontent.com/114161306/191947829-3d1dfb7c-4c36-441c-ab0b-2f09a0841465.png)
 
-
+```py
 a,b = iterate(a,b,x,y,2)
 prediction=model(a,b,x)
 loss = loss_function(a, b, x, y)
@@ -116,8 +121,10 @@ print(a,b,loss)
 plt.scatter(x,y)
 plt.plot(x,prediction)
 
+```
 ![image](https://user-images.githubusercontent.com/114161306/191947885-54e06c0a-058d-4043-97a6-a755aa54842c.png)
 
+```py
 a,b = iterate(a,b,x,y,3)
 prediction=model(a,b,x)
 loss = loss_function(a, b, x, y)
@@ -125,8 +132,10 @@ print(a,b,loss)
 plt.scatter(x,y)
 plt.plot(x,prediction)
 
+```
 ![image](https://user-images.githubusercontent.com/114161306/191947935-c20a4689-82dc-46e5-97e9-3d99e8840c5b.png)
 
+```py
 a,b = iterate(a,b,x,y,4)
 prediction=model(a,b,x)
 loss = loss_function(a, b, x, y)
@@ -134,8 +143,11 @@ print(a,b,loss)
 plt.scatter(x,y)
 plt.plot(x,prediction)
 
+```
+
 ![image](https://user-images.githubusercontent.com/114161306/191947979-30996e7a-f95c-442e-a72b-5f80d6f6271f.png)
 
+```py
 a,b = iterate(a,b,x,y,5)
 prediction=model(a,b,x)
 loss = loss_function(a, b, x, y)
@@ -143,14 +155,19 @@ print(a,b,loss)
 plt.scatter(x,y)
 plt.plot(x,prediction)
 
+```
+
 ![image](https://user-images.githubusercontent.com/114161306/191948009-b0745879-a8d0-4b27-934c-bca76e48e38f.png)
 
+```py
 a,b = iterate(a,b,x,y,10000)
 prediction=model(a,b,x)
 loss = loss_function(a, b, x, y)
 print(a,b,loss)
 plt.scatter(x,y)
 plt.plot(x,prediction)
+
+```
 
 ![image](https://user-images.githubusercontent.com/114161306/191948037-767978d6-dd02-440b-b164-263dc7e405b7.png)
 
