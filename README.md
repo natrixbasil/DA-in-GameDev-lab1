@@ -1,7 +1,7 @@
 # АНАЛИЗ ДАННЫХ И ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ [in GameDev]
-Отчет по лабораторной работе #1 выполнил(а):
-- Иванова Ивана Варкравтовна
-- РИ000024
+Отчет по лабораторной работе #1 выполнила:
+- Грошева Василиса
+- 
 Отметка о выполнении заданий (заполняется студентом):
 
 | Задание | Выполнение | Баллы |
@@ -63,6 +63,96 @@ plt.scatter(x,y)
 ```
 
 - Определите связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
+
+![image](https://user-images.githubusercontent.com/114161306/191946018-d0d7afe2-ce23-4e44-b003-cbf425161cd6.png)
+
+#The basic linear regression model is wx+ b, and since this is a two-dimensional space, the model is ax+ b
+def model(a, b, x):
+    return a*x + b
+#Tahe most commonly used loss function of linear regression model is the loss function of mean variance difference
+def loss_function(a, b, x, y):
+    num = len(x)
+    prediction=model(a,b,x)
+    return (0.5/num) * (np.square(prediction-y)).sum()
+#The optimization function mainly USES partial derivatives to update two parameters a and b
+def optimize(a,b,x,y):
+    num = len(x)
+    prediction = model(a,b,x)
+    #Update the values of A and B by finding the partial derivatives of the loss function on a and b
+    da = (1.0/num) * ((prediction -y)*x).sum()
+    db = (1.0/num) * ((prediction -y).sum())
+    a = a - Lr*da
+    b = b - Lr*db
+    return a, b
+#iterated function, return a and b
+def iterate(a,b,x,y,times):
+    for i in range(times):
+        a,b = optimize(a,b,x,y)
+    return a,b
+    
+    ```
+    
+    #Initialize parameters and display
+a = np.random.rand(1)
+print(a)
+b = np.random.rand(1)
+print(b)
+Lr = 0.000001
+#For the first iteration, the parameter values, losses, and visualization after the iteration are displayed
+a,b = iterate(a,b,x,y,1)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+plt.scatter(x,y)
+plt.plot(x,prediction)
+
+![image](https://user-images.githubusercontent.com/114161306/191947829-3d1dfb7c-4c36-441c-ab0b-2f09a0841465.png)
+
+
+a,b = iterate(a,b,x,y,2)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+plt.scatter(x,y)
+plt.plot(x,prediction)
+
+![image](https://user-images.githubusercontent.com/114161306/191947885-54e06c0a-058d-4043-97a6-a755aa54842c.png)
+
+a,b = iterate(a,b,x,y,3)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+plt.scatter(x,y)
+plt.plot(x,prediction)
+
+![image](https://user-images.githubusercontent.com/114161306/191947935-c20a4689-82dc-46e5-97e9-3d99e8840c5b.png)
+
+a,b = iterate(a,b,x,y,4)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+plt.scatter(x,y)
+plt.plot(x,prediction)
+
+![image](https://user-images.githubusercontent.com/114161306/191947979-30996e7a-f95c-442e-a72b-5f80d6f6271f.png)
+
+a,b = iterate(a,b,x,y,5)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+plt.scatter(x,y)
+plt.plot(x,prediction)
+
+![image](https://user-images.githubusercontent.com/114161306/191948009-b0745879-a8d0-4b27-934c-bca76e48e38f.png)
+
+a,b = iterate(a,b,x,y,10000)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+plt.scatter(x,y)
+plt.plot(x,prediction)
+
+![image](https://user-images.githubusercontent.com/114161306/191948037-767978d6-dd02-440b-b164-263dc7e405b7.png)
 
 
 ## Задание 2
