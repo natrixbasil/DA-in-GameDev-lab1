@@ -225,16 +225,10 @@ oEditor.CreateSphere(
 )
 
 ```
+В ходе этой лабораторной работы я написала базовые программы hello World на Python и Unity, а также использовала код для запуска модели линейной регрессии, что (как нам потом объяснили) является базовой задачей в дата-анализе. И слава богу.
 
-
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
+## Выводы
+###
 
 ## Powered by
 
