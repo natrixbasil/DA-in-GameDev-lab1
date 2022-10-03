@@ -1,5 +1,4 @@
-# СБОР, ОБРАБОТКА И ВИЗУАЛИЗАЦИЯ ТЕСТОВОГО
-НАБОРА ДАННЫХ.
+# СБОР, ОБРАБОТКА И ВИЗУАЛИЗАЦИЯ ТЕСТОВОГО НАБОРА ДАННЫХ.
 Отчет по лабораторной работе #2 выполнила:
 - Грошева Василиса
 
@@ -183,5 +182,69 @@ public class NewBehaviourScript : MonoBehaviour
 
 ## Задание 2
 Реализовать запись в Google-таблицу набора данных, полученных с помощью линейной регрессии из лабораторной работы № 1
+
+```py
+import gspread
+import numpy as np
+x = [3,21,22,34,54,34,55,67,89,99]
+x = np.array(x)
+y = [2,22,24,65,79,82,55,130,150,199]
+y = np.array(y)
+
+#The basic linear regression model is wx+ b, and since this is a two-dimensional space, the model is ax+ b
+def model(a, b, x):
+    return a*x + b
+#Tahe most commonly used loss function of linear regression model is the loss function of mean variance difference
+def loss_function(a, b, x, y):
+    num = len(x)
+    prediction=model(a,b,x)
+    return (0.5/num) * (np.square(prediction-y)).sum()
+#The optimization function mainly USES partial derivatives to update two parameters a and b
+def optimize(a,b,x,y):
+    num = len(x)
+    prediction = model(a,b,x)
+    #Update the values of A and B by finding the partial derivatives of the loss function on a and b
+    da = (1.0/num) * ((prediction -y)*x).sum()
+    db = (1.0/num) * ((prediction -y).sum())
+    a = a - Lr*da
+    b = b - Lr*db
+    return a, b
+#iterated function, return a and b
+def iterate(a,b,x,y,times):
+    for i in range(times):
+        a,b = optimize(a,b,x,y)
+    return a,b
+
+#Initialize parameters and display
+a = np.random.rand(1)
+print(a)
+b = np.random.rand(1)
+print(b)
+Lr = 0.000001
+
+
+a,b = iterate(a,b,x,y,5)
+prediction=model(a,b,x)
+loss = loss_function(a, b, x, y)
+print(a,b,loss)
+
+gc = gspread.service_account(filename = 'unitydatascience-364407-0c39f71b8174.json')
+sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1oGfAHKsDBnTtgq7IYbe_dx7XzxREH-QNCT3Kk66ZAMo/edit#gid=0')
+worksheet = sh.get_worksheet(0)
+
+newa = str(a)
+newa = newa.replace('.', ',')
+newb = str(b)
+newb = newb.replace('.', ',')
+newloss = str(loss)
+newloss = newloss.replace('.', ',')
+worksheet.update('A1', str(newa))
+worksheet.update('B1', str(newb))
+worksheet.update('C1', str(newloss))
+```
+![image](https://user-images.githubusercontent.com/114161306/193571174-b6ecff5b-ca97-4d19-aba4-72b10e4be1c9.png)
+
+## Задание 3
+
 
 **BigDigital Team: Denisov | Fadeev | Panov**
