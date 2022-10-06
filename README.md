@@ -1,4 +1,4 @@
-# АНАЛИЗ ДАННЫХ И ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ [in GameDev]
+# РАЗРАБОТКА СИСТЕМЫ МАШИННОГО ОБУЧЕНИЯ
 Отчет по лабораторной работе #1 выполнила:
 - Грошева Василиса
 
@@ -35,11 +35,119 @@
 - ✨Magic ✨
 
 ## Цель работы
-Ознакомиться с основными операторами зыка Python на примере реализации линейной регрессии.
+Познакомиться с программными средствами для создания системы машинного обучения и ее интеграции в Unity.
 
+## Постановка задачи
+В данной лабораторной работе мы создадим ML-агент и будем тренировать нейросеть, задача которой будет заключаться в управлении шаром. Задача шара заключается в том, чтобы оставаясь на плоскости находить кубик, смещающийся в заданном случайном диапазоне координат.
 ## Задание 1
-### Поставить софт для работы с питоном и научиться писать hello world (основное задание на 60 баллов)
-![image](https://user-images.githubusercontent.com/114161306/192728935-4f8d983e-f906-40c6-b305-602e56fb9ded.png)
+Реализовать систему машинного обучения в связке Python - Google-Sheets – Unity.
+- Создать новый пустой 3D проект на Unity
+![изображение](https://user-images.githubusercontent.com/114161306/194391492-b1733c7a-39c5-4539-a6a1-6571256e0831.png)
+- Скачать папку с ML-агентом
+![изображение](https://user-images.githubusercontent.com/114161306/194391706-c91dcc22-a728-4664-96a4-1d59ee15b54d.png)
+
+- Добавить ML-агент в проект
+![изображение](https://user-images.githubusercontent.com/114161306/194392076-2459b487-f79e-4237-877c-f6b7bb651e07.png)
+
+- Написать серию команд для создания и активации нового ML-агента, а также для скачивания необходимых библиотек в Anaconda Prompt
+
+```py
+(base) C:\windows\system32>create -n MlAgent python=3.6.13
+```
+
+```py
+(base) C:\windows\system32>conda create -n MlAgent python=3.6.13
+```
+
+```py
+(base) C:\windows\system32>conda activate MLAgent
+```
+
+```py
+(MLAgent) C:\windows\system32>pip install torch~=1.7.1 -f https://download.pytorch.org/whl/torch_stable.html
+```
+
+```py
+(MLAgent) C:\windows\system32>cd C:\Users\189\My project
+```
+- Создать на сцене плостость, куб и сферу, добавить к ним простой скрипт
+![изображение](https://user-images.githubusercontent.com/114161306/194393232-6d7f3b4f-72fc-4fb6-8882-c73ae7871c38.png)
+
+- Добавить код в скрипт-файл:
+```py
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
+
+public class RollerAgent : Agent
+{
+    Rigidbody rBody;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+    }
+
+    public Transform Target;
+    public override void OnEpisodeBegin()
+    {
+        if (this.transform.localPosition.y < 0)
+        {
+            this.rBody.angularVelocity = Vector3.zero;
+            this.rBody.velocity = Vector3.zero;
+            this.transform.localPosition = new Vector3(0, 0.5f, 0);
+        }
+
+        Target.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(Target.localPosition);
+        sensor.AddObservation(this.transform.localPosition);
+        sensor.AddObservation(rBody.velocity.x);
+        sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.x = actionBuffers.ContinuousActions[0];
+        controlSignal.z = actionBuffers.ContinuousActions[1];
+        rBody.AddForce(controlSignal * forceMultiplier);
+
+        float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
+
+        if(distanceToTarget < 1.42f)
+        {
+            SetReward(1.0f);
+            EndEpisode();
+        }
+        else if (this.transform.localPosition.y < 0)
+        {
+            EndEpisode();
+        }
+    }
+}
+
+```
+
+- Добавить и настроить компоненты объекта "Шар"
+
+![изображение](https://user-images.githubusercontent.com/114161306/194394406-39785563-862c-4614-8d1a-644497cc999d.png)
+
+- В корень проекта добавить файл конфигурации нейронной сети
+
+![изображение](https://user-images.githubusercontent.com/114161306/194394592-35ea9b3a-c857-4f84-8185-4baaa9f1bb71.png)
+
+- Запустить ML-агента
+```py
+(MLAgent) C:\Users\189\My project>mlagents-learn rollerball_config.yaml --run-id=RollerBall --resume
+```
+
+
 
 ## Задание 2
 ### Поставить unity для создания игровых сцен и научиться писать hello world (доп. задание на 20 баллов)
